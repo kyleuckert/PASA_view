@@ -1,12 +1,12 @@
 # PASA_view
 <b>Description:</b><br>
 <p>
-This program will display IR spectra, convert from wavelenegth to wavenumber, allow for comparisons to the USGS reference IR spectral library, label spectra, and save figures and spectra.
-</p>
+This program will display IR spectra, convert from wavelength to wavenumber domaing, allow for comparisons to the USGS IR spectral library, label spectra, and save figures and spectra.</p>
 
 <b>Operation:</b><br>
 <p>
 <i>Open a file:</i>
+<ul>
 <li>file-> Open-> Open PASA Spectrum -> navigate to file</li>
 <i>Open a reference file:</i>
 <li>file-> Open-> Open Reference Spectrum -> navigate to file</li>
