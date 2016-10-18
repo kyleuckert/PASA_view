@@ -5,7 +5,7 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 
 <b>Operation:</b><br>
 <p>
-<i>Open a file:</i>
+<i>Open a PASA data file:</i>
 <ul>
 <li>file-> Open-> Open PASA Spectrum -> navigate to file</li>
 <i>Open a reference file:</i>
@@ -13,7 +13,7 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 <i>Note:</i>
 <li>currently .txt, .csv, and .asc files are supported</li>
 <li>files may be comma, space, or tab delimited</li>
-<li>files are assumed to be in wavelength fomain</li>
+<li>files are assumed to be in wavelength domain</li>
 </ul></p>
 
 <p>
@@ -21,8 +21,8 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 <ul>
 <li>click "Wavenumber" or "Wavelength" button</li>
 <li>If a user-defined axis range has been selected, you will need to enter new axis values:</li>
-<ul><li>1.6 $\mu$m = 6250 cm$^{-1}$</li>
-<li>3.6 $\mu$m = 2780 cm$^{-1}$</li>
+<ul><li>1.6 µm = 6250 cm<sup>-1</sup></li>
+<li>3.6 µm = 2780 cm<sup>-1</sup></li>
 </ul></ul></p>
 
 <p>
@@ -30,7 +30,8 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 <ul>
 <li>applies a <a href="http://docs.scipy.org/doc/scipy-dev/reference/generated/scipy.signal.savgol_filter.html#scipy.signal.savgol_filter">Savitsky-Golay Smoothing filter</a> to the data</li>
 <li>click "Smooth" button</li>
-<li>enter values in dialog box:</li>
+<li>enter values in dialog box for each spectrum:</li>
+<li>a value of 0 for both variables will not smooth the data</li>
 <li>Window Length: length of filter window</li>
 <ul>
 <li>must be positive odd integer</li>
@@ -45,7 +46,11 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 <p>
 <i>Offset Spectra</i>
 <ul>
-<li>x</li>
+<li>offsets spectrum vertically, scales spectra by multiplicative constant</li>
+<li>click "Offset" button</li>
+<li>enter values in dialog box for each spectrum:</li>
+<li>Offset: vertical offset</li>
+<li>Scale: linear scaling</li>
 </ul></p>
 
 <p>
@@ -62,21 +67,46 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 </ul></p>
 
 <p>
-<i>Define Axis</i>
+<i>Define Axes</i>
 <ul>
-<li>x</li>
-</ul></p>
+<li>click "Define Axes" button</li>
+<li>enter values in dialog box for horizontal and vertical axes</li>
+<ul>
+<li>1.6 µm = 6250 cm<sup>-1</sup></li>
+<li>3.6 µm = 2780 cm<sup>-1</sup></li>
+</ul></ul></p>
 
 <p>
 <i>Legend Format</i>
 <ul>
-<li>x</li>
-</ul></p>
+<li>click "Legend Format"</li>
+<li>enter values in dialog box for spectrum name, spectrum linestyle, and legend font size</li>
+<li>Linestyle uses matplotlib commands</li>
+<ul>
+<li>colors:</li>
+<ul>
+<li>k or 'black'</li>
+<li>b or 'blue'</li>
+<li>g or 'green'</li>
+<li>r or 'red'</li>
+<li>c or 'cyan'</li>
+<li>m or 'magenta'</li>
+<li>y or 'yellow'</li>
+<li>w or 'white'</li>
+</ul>
+<li>linestyles:</li>
+<ul>
+<li>- or 'solid'</li>
+<li>-- or 'dashed'</li>
+<li>-. or 'dashdot'</li>
+<li>: or 'dotted'</li>
+<li>'None'</li>
+</ul></ul></ul></p>
 
 <p>
 <i>Reset</i>
 <ul>
-<li>x</li>
+<li>Click "Reset" to reset the plotting window and remove all stored data and variables.</li>
 </ul></p>
 
 <p>
@@ -97,7 +127,7 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 <ul>
 <li>Allow user to add lines pointing to peak labels</li>
 <li>Retrieve new label positions (after dragging) and overwrite values in label arrays</li>
-<li>Break labTOF_main.py into modules</li>
+<li>Break PASAview_main.py into modules</li>
 </ul>
 
 <b>Installation:</b>
@@ -113,8 +143,8 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 
 <p>
 <ul>
-<li>Download this github repository (<a href="https://github.com/kyleuckert/LaserTOF/archive/master.zip">Download ZIP button</a>).</li>
-<li>Start the program by double-clicking the LaserTOF_main.py file within the LaserTOF folder. If this is the first time you are running a .py file, you may need to set .py to open using Python 2.7 by default:</li>
+<li>Download this github repository (<a href="https://github.com/kyleuckert/PASA_view/archive/master.zip">Download ZIP button</a>).</li>
+<li>Start the program by double-clicking the PASAview_main.py file within the PASA_view folder. If this is the first time you are running a .py file, you may need to set .py to open using Python 2.7 by default:</li>
 <ul>
 <li>right click .py file, click "properties"</li>
 <li>opens with -> change</li>
