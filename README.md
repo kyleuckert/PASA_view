@@ -1,12 +1,13 @@
 # PASA_view
 <b>Description:</b><br>
 <p>
-This program will display IR spectra, convert from wavelength to wavenumber domaing, allow for comparisons to the USGS IR spectral library, label spectra, and save figures and spectra.</p>
+This program will display IR spectra, convert from wavelength to wavenumber domain, allow for comparisons to the USGS IR spectral library, label spectra, and save figures and spectra.</p>
 
 <b>Operation:</b><br>
 <p>
-<i>Open a PASA data file:</i>
+<i>Open a file:</i>
 <ul>
+<i>Open a PASA data file file:</i>
 <li>file-> Open-> Open PASA Spectrum -> navigate to file</li>
 <i>Open a reference file:</i>
 <li>file-> Open-> Open Reference Spectrum -> navigate to file</li>
@@ -44,9 +45,9 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 </ul></ul></p>
 
 <p>
-<i>Offset Spectra</i>
+<i>Offset Spectrum</i>
 <ul>
-<li>offsets spectrum vertically, scales spectra by multiplicative constant</li>
+<li>offsets spectrum vertically, scales spectrum by multiplicative constant</li>
 <li>click "Offset" button</li>
 <li>enter values in dialog box for each spectrum:</li>
 <li>Offset: vertical offset</li>
@@ -60,8 +61,8 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 <li>optional: zoom in to region of interest</li>
 <li>click "Label Feature" button</li>
 <li>click the region of interest</li>
-<li>enter the accompanying text</li>
-<li>repeat for all desired areas</li>
+<li>enter the accompanying text for the label</li>
+<li>repeat for all desired regions</li>
 <li>labels may be dragged to a more desirable location</li>
 <li>click "Remove Labels" to remove all labels</li>
 </ul></p>
@@ -119,13 +120,13 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 <i>Save spectrum as ASCII file</i>
 <ul>
 <li>File->Export File</li>
-<li>saves current spectrum (in wavelength or wavenumber domain, which ever is displayed)</li>
+<li>saves current spectrum (in wavelength or wavenumber domain, whichever is displayed)</li>
 <li>data is stored in a two column, space-delimited format</li>
 </ul></p>
 
 <b>Future Plans:</b>
 <ul>
-<li>Allow user to add lines pointing to peak labels</li>
+<li>Allow user to add lines connecting spectral regions to labels</li>
 <li>Retrieve new label positions (after dragging) and overwrite values in label arrays</li>
 <li>Break PASAview_main.py into modules</li>
 </ul>
