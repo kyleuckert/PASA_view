@@ -57,7 +57,9 @@ class PASAview(Frame):
 
 		#list containing filename for legend
 		self.spec_name=[]
+		self.spec_name_legend=[]
 		self.spec_name_reference=[]
+		self.spec_name_reference_legend=[]
 		self.legend_fontsize=10
 		
 		#offset/scale values
@@ -75,12 +77,18 @@ class PASAview(Frame):
 
 		#linestyle definition
 		self.linestyle_format=['k-']
+		self.linestyle_format_legend=['k-']
 		self.linestyle_format_reference=[]
+		self.linestyle_format_reference_legend=[]
 
 		#flag to indicate whether wavelength or wavenumber is displayed
 		#wavelength flag=0
 		#wavenumber flag=1
 		self.wavelength_wavenumber_flag=0
+		
+		self.display_spectrum=IntVar()
+		self.display_spectrum.set(1)
+		self.display_spectrum_reference=[]
 
 		#list containing label values
 		self.label_wavelength=[]
@@ -189,7 +197,7 @@ class PASAview(Frame):
 		ax = self.fig.add_subplot(111)
 		#clear axis
 		ax.cla()
-		spectrum=ax.plot(data[0],data[1], self.linestyle_format[0], label=self.spec_name)
+		spectrum=ax.plot(data[0],data[1], self.linestyle_format_legend[0], label=self.spec_name_legend)
 		ax.set_xlabel(xaxis_title)#, fontsize=6)
 		ax.set_ylabel('reflectance')#, fontsize=6)
 		#for autoscale
@@ -203,7 +211,7 @@ class PASAview(Frame):
 
 		#add reference spectra
 		for index, wave in enumerate(data_reference[0]):
-			ax.plot(wave, data_reference[1][index], self.linestyle_format_reference[index], label=self.spec_name_reference[index])
+			ax.plot(wave, data_reference[1][index], self.linestyle_format_reference_legend[index], label=self.spec_name_reference_legend[index])
 
 		#insert legend
 		#the position could be user-defined
@@ -266,32 +274,24 @@ class PASAview(Frame):
 				self.refl=data[1]
 				#self.refl = [x+0.00075 for x in data[1]]
 				self.wavelength=data[0]
-				if self.wavelength_wavenumber_flag==0:
-					self.wavelength_domain()
-				elif self.wavelength_wavenumber_flag==1:
-					self.wavenumber_domain()
 
 			elif fl[-3:] == 'csv':
 				data = self.readFile(fl)
 				self.refl=data[1]
 				#self.refl = [x+0.00075 for x in data[1]]
 				self.wavelength=data[0]
-				if self.wavelength_wavenumber_flag==0:
-					self.wavelength_domain()
-				elif self.wavelength_wavenumber_flag==1:
-					self.wavenumber_domain()
 
 			elif fl[-3:] == 'asc':
 				data = self.readFile(fl)
 				#ignore data with refl values less than 0
 				index_pos=bisect.bisect(data[1], 0)
-				self.refl_reference.append(data[1][index_pos:])
-				self.wavelength_reference.append(data[0][index_pos:])
-				self.wavelength=data[0]
-				if self.wavelength_wavenumber_flag==0:
-					self.wavelength_domain()
-				elif self.wavelength_wavenumber_flag==1:
-					self.wavenumber_domain()
+				self.refl=data[1][index_pos:]
+				self.wavelength=data[0][index_pos:]
+			
+			if self.wavelength_wavenumber_flag==0:
+				self.wavelength_domain()
+			elif self.wavelength_wavenumber_flag==1:
+				self.wavenumber_domain()
 
 
 			#allows reference spectrum to be added
@@ -325,20 +325,12 @@ class PASAview(Frame):
 				#self.refl_reference=data[1]
 				self.refl_reference.append(data[1])
 				self.wavelength_reference.append(data[0])
-				if self.wavelength_wavenumber_flag==0:
-					self.wavelength_domain()
-				elif self.wavelength_wavenumber_flag==1:
-					self.wavenumber_domain()
 
 			elif fl[-3:] == 'csv':
 				data = self.readFile(fl)
 				#self.refl_reference=data[1]
 				self.refl_reference.append(data[1])
 				self.wavelength_reference.append(data[0])
-				if self.wavelength_wavenumber_flag==0:
-					self.wavelength_domain()
-				elif self.wavelength_wavenumber_flag==1:
-					self.wavenumber_domain()
 
 			elif fl[-3:] == 'asc':
 				data = self.readFile(fl)
@@ -346,10 +338,13 @@ class PASAview(Frame):
 				index_pos=bisect.bisect(data[1], 0)
 				self.refl_reference.append(data[1][index_pos:])
 				self.wavelength_reference.append(data[0][index_pos:])
-				if self.wavelength_wavenumber_flag==0:
-					self.wavelength_domain()
-				elif self.wavelength_wavenumber_flag==1:
-					self.wavenumber_domain()
+
+		self.display_spectrum_reference.append(IntVar())
+		self.display_spectrum_reference[len(self.spec_name_reference)-1].set(1)
+		if self.wavelength_wavenumber_flag==0:
+			self.wavelength_domain()
+		elif self.wavelength_wavenumber_flag==1:
+			self.wavenumber_domain()
 		
 	#function for file input
 	def readFile(self, filename):
@@ -433,7 +428,31 @@ class PASAview(Frame):
 	#disabled until spectrum is plotted
 	def wavelength_domain(self):
 		self.wavelength_wavenumber_flag=0
-		self.generate_figure([self.wavelength,self.refl], [self.label_wavelength, self.label_refl], 'wavelength ($\mu$m)', [self.wavelength_reference ,self.refl_reference])
+		#self.generate_figure([self.wavelength,self.refl], [self.label_wavelength, self.label_refl], 'wavelength ($\mu$m)', [self.wavelength_reference, self.refl_reference])
+		#only display checked spectra
+		if self.display_spectrum.get() == 1:
+			wavelength_temp = self.wavelength
+			refl_temp = self.refl
+			self.linestyle_format_legend=self.linestyle_format
+			self.spec_name_legend=self.spec_name
+		elif self.display_spectrum.get() == 0:
+			wavelength_temp = []
+			refl_temp = []
+			self.linestyle_format_legend=['']
+			self.spec_name_legend=''
+		wavelength_ref_temp = []
+		refl_ref_temp = []
+		self.spec_name_reference_legend=[]
+		self.linestyle_format_reference_legend=[]
+		for index, i in enumerate(self.wavelength_reference):
+			if self.display_spectrum_reference[index].get() == 1:
+				wavelength_ref_temp.append(self.wavelength_reference[index])
+				refl_ref_temp.append(self.refl_reference[index])
+				self.spec_name_reference_legend.append(self.spec_name_reference[index])
+				self.linestyle_format_reference_legend.append(self.linestyle_format_reference[index])
+
+
+		self.generate_figure([wavelength_temp, refl_temp], [self.label_wavelength, self.label_refl], 'wavelength ($\mu$m)', [wavelength_ref_temp, refl_ref_temp])
 	
 	#convert to wavenumber domain	
 	#disabled until spectrum is plotted
@@ -446,7 +465,30 @@ class PASAview(Frame):
 			temp=[10000/x for x in i]
 			self.wavenumber_reference.append(temp)
 		self.wavenumber = [10000/x for x in self.wavelength]
-		self.generate_figure([self.wavenumber,self.refl], [self.label_wavenumber, self.label_refl], 'wavenumber (cm$^{-1}$)', [self.wavenumber_reference ,self.refl_reference])
+		#self.generate_figure([self.wavenumber,self.refl], [self.label_wavenumber, self.label_refl], 'wavenumber (cm$^{-1}$)', [self.wavenumber_reference ,self.refl_reference])
+		if self.display_spectrum.get() == 1:
+			wavenumber_temp = self.wavenumber
+			refl_temp = self.refl
+			self.linestyle_format_legend=self.linestyle_format
+			self.spec_name_legend=self.spec_name
+		elif self.display_spectrum.get() == 0:
+			wavenumber_temp = []
+			refl_temp = []
+			self.linestyle_format_legend=['']
+			self.spec_name_legend=''
+		wavenumber_ref_temp = []
+		refl_ref_temp = []
+		self.spec_name_reference_legend=[]
+		self.linestyle_format_reference_legend=[]
+		for index, i in enumerate(self.wavelength_reference):
+			if self.display_spectrum_reference[index].get() == 1:
+				wavenumber_ref_temp.append(self.wavenumber_reference[index])
+				refl_ref_temp.append(self.refl_reference[index])
+				self.spec_name_reference_legend.append(self.spec_name_reference[index])
+				self.linestyle_format_reference_legend.append(self.linestyle_format_reference[index])
+
+		self.generate_figure([wavenumber_temp,refl_temp], [self.label_wavenumber, self.label_refl], 'wavenumber (cm$^{-1}$)', [wavenumber_ref_temp, refl_ref_temp])
+
 		
 	#smooth data
 	#disabled until spectrum is plotted
@@ -786,10 +828,11 @@ class PASAview(Frame):
 		self.pn.insert(0, self.spec_name)
 		self.pn.grid(row=2, column=1, padx=5, pady=5)
 		
-		Label(top, text="Linestyle:").grid(row=2, column=3, sticky=W, padx=5, pady=5)
+		Label(top, text="Linestyle:").grid(row=2, column=2, sticky=W, padx=5, pady=5)
 		self.pl=Entry(top)
 		self.pl.insert(0, self.linestyle_format[0])
-		self.pl.grid(row=2, column=4, padx=5, pady=5)
+		self.pl.grid(row=2, column=3, padx=5, pady=5)
+		Checkbutton(top, variable=self.display_spectrum, text="Display", onvalue=1, offvalue=0).grid(row=2, column=4, sticky=W, padx=5, pady=5)
 
 		index = -2
 		if self.spec_name_reference != []:
@@ -798,22 +841,25 @@ class PASAview(Frame):
 				if index == 0:
 					self.rn=[' ']*len(self.spec_name_reference)
 					self.rl=[' ']*len(self.spec_name_reference)
+				
 				Label(top, text="Name:").grid(row=4+index, column=0, sticky=W, padx=5, pady=5)
 				self.rn[index]=Entry(top)
 				self.rn[index].insert(0, name)
 				self.rn[index].grid(row=4+index, column=1, padx=5, pady=5)
 		
-				Label(top, text="Linestyle:").grid(row=4+index, column=3, sticky=W, padx=5, pady=5)
+				Label(top, text="Linestyle:").grid(row=4+index, column=2, sticky=W, padx=5, pady=5)
 				self.rl[index]=Entry(top)
 				self.rl[index].insert(0, self.linestyle_format_reference[index])
-				self.rl[index].grid(row=4+index, column=4, padx=5, pady=5)
+				self.rl[index].grid(row=4+index, column=3, padx=5, pady=5)
+				Checkbutton(top, variable=self.display_spectrum_reference[index], text="Display", onvalue=1, offvalue=0).grid(row=4+index, column=4, sticky=W, padx=5, pady=5)
+
 			
 		#asks for legend font size
 		Label(top, text="Legend:").grid(row=5+index, column=0, sticky=W, padx=5, pady=5)
 		Label(top, text="Font Size:").grid(row=6+index, column=0, sticky=W, padx=5, pady=5)
 		self.lf=Entry(top)
 		self.lf.insert(0, self.legend_fontsize)
-		self.lf.grid(row=6+index, column=4, padx=5, pady=5)
+		self.lf.grid(row=6+index, column=1, padx=5, pady=5)
 
 		#calls DialogLegendOK to set these values
 		b=Button(top, text="OK", command=self.DialogLegendOK)
