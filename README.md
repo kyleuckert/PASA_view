@@ -126,7 +126,6 @@ This program will display IR spectra, convert from wavelength to wavenumber doma
 
 <b>Future Plans:</b>
 <ul>
-<li>Allow user to select which reference spectra are to be displayed</li>
 <li>Allow user to add lines connecting spectral regions to labels</li>
 <li>Retrieve new label positions (after dragging) and overwrite values in label arrays</li>
 <li>Break PASAview_main.py into modules</li>
